@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clever Developer - Digital Clock</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1f4068, #162447);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .clock-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px 60px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        #greeting {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        #clock {
+            font-size: 64px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        #date {
+            font-size: 20px;
+            color: #e4e4e4;
+        }
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #e43f5a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock-container">
+        <!-- These will change automatically using JavaScript -->
+        <div id="greeting">Hello!</div>
+        <div id="clock">00:00:00 AM</div>
+        <div id="date">Loading date...</div>
+        
+        <br>
+        <!-- A button to easily go back to your calculator -->
+        <a href="index.html" class="back-btn">Go to Calculator</a>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // 1. Get the current time
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            // 2. Change greeting based on the hour
+            let greetingText = "Good Night!";
+            if (hours < 12) {
+                greetingText = "Good Morning!";
+            } else if (hours < 18) {
+                greetingText = "Good Afternoon!";
+            } else {
+                greetingText = "Good Evening!";
+            }
+            
+            // Convert to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            
+            // Add a leading zero to numbers less than 10 (e.g., "05" instead of "5")
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            // 3. Get the current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateText = now.toLocaleDateString('en-US', options);
+            
+            // 4. Put all this information onto the screen
+            document.getElementById('greeting').innerText = greetingText;
+            document.getElementById('clock').innerText = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+            document.getElementById('date').innerText = dateText;
+        }
+
+        // Run the clock function immediately
+        updateClock();
+        
+        // Tell the browser to run the function again every 1000 milliseconds (1 second)
+        setInterval(updateClock, 1000);
+    </script>
+
+</body>
+</html>
