@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clever Developer - To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .todo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 350px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-btn:hover { background-color: #0056b3; }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            padding: 12px;
+            background: #f8f9fa;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-left: 4px solid #007bff;
+        }
+        /* This CSS class crosses out completed items */
+        .completed {
+            text-decoration: line-through;
+            color: #aaa;
+            background: #e9ecef;
+            border-left-color: #6c757d;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff3b30;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-links {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .nav-links a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-container">
+        <h2>My Tasks</h2>
+        
+        <div class="input-area">
+            <input type="text" id="taskInput" placeholder="Add a new task...">
+            <button class="add-btn" onclick="addTask()">Add</button>
+        </div>
+
+        <!-- This list starts completely empty -->
+        <ul id="taskList"></ul>
+
+        <div class="nav-links">
+            <a href="index.html">⬅️ Back to Calculator</a>
+            <a href="clock.html">⏱️ Go to Clock</a>
+        </div>
+    </div>
+
+    <script>
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+
+            // Safety check: Don't add empty tasks
+            if (taskText === "") {
+                alert("Please type a task first!");
+                return;
+            }
+
+            const ul = document.getElementById('taskList');
+
+            // 1. Create a brand new <li> element using code
+            const li = document.createElement('li');
+            
+            // 2. Set the text inside the item
+            li.innerHTML = `<span>${taskText}</span> <button class="delete-btn" onclick="deleteTask(this)">X</button>`;
+
+            // 3. Make the text clickable so it crosses off the task
+            li.addEventListener('click', function(e) {
+                // Only toggle if they didn't click the delete button
+                if (e.target.tagName !== 'BUTTON') {
+                    li.classList.toggle('completed');
+                }
+            });
+
+            // 4. Put the new task item inside our list on the screen
+            ul.appendChild(li);
+
+            // 5. Clear the input box so it's ready for the next task
+            input.value = "";
+        }
+
+        function deleteTask(button) {
+            // Find the parent item (the <li>) and remove it entirely
+            const li = button.parentElement;
+            li.remove();
+        }
+    </script>
+
+</body>
+</html>
