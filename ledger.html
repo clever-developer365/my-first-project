@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,7 +29,6 @@
             text-align: center;
             font-size: 24px;
         }
-        /* Dashboard Dashboard Styling */
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -61,8 +60,6 @@
             border-color: #a7f3d0;
         }
         .total-box p { color: #059669; }
-
-        /* Form Fields Styling */
         .form-group {
             margin-bottom: 15px;
         }
@@ -94,8 +91,6 @@
             margin-top: 10px;
         }
         .btn-submit:hover { background-color: #059669; }
-
-        /* Ledger Table Layout */
         .ledger-title {
             margin-top: 30px;
             font-size: 18px;
@@ -134,7 +129,6 @@
     <div class="container">
         <h2>📊 Sales Ledger Dashboard</h2>
         
-        <!-- Live Statistics Box -->
         <div class="dashboard">
             <div class="stat-box total-box">
                 <h3>Total Revenue Today</h3>
@@ -150,7 +144,6 @@
             </div>
         </div>
 
-        <!-- Add New Transaction Form -->
         <div class="form-group">
             <label for="itemName">Item Name / Service</label>
             <input type="text" id="itemName" placeholder="e.g., Bread, Haircut, Shoes">
@@ -174,7 +167,6 @@
 
         <button class="btn-submit" onclick="logSale()">💰 Log New Sale</button>
 
-        <!-- The Historical Ledger Table -->
         <div class="ledger-title">Transaction History</div>
         <table>
             <thead>
@@ -185,9 +177,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody id="ledgerBody">
-                <!-- Javascript will inject sales records here dynamically -->
-            </tbody>
+            <tbody id="ledgerBody"></tbody>
         </table>
 
         <div class="nav-links">
@@ -198,10 +188,8 @@
     </div>
 
     <script>
-        // 1. Core Logic: Check if database has old data, or start fresh
         let salesDatabase = JSON.parse(localStorage.getItem('mySalesData')) || [];
 
-        // Run this immediately to show saved data from yesterday/earlier sessions
         updateUI();
 
         function logSale() {
@@ -213,34 +201,28 @@
             const category = catInput.value;
             const price = parseFloat(priceInput.value);
 
-            // Basic validation
             if (name === "" || isNaN(price) || price <= 0) {
                 alert("Please fill in a valid product name and price!");
                 return;
             }
 
-            // Create a structured data object for the transaction
             const newSale = {
-                id: Date.now(), // Unique identifier to help find/delete it later
+                id: Date.now(),
                 name: name,
                 category: category,
                 price: price
             };
 
-            // Push object to the array, then commit it to browser LocalStorage database
             salesDatabase.push(newSale);
             localStorage.setItem('mySalesData', JSON.stringify(salesDatabase));
 
-            // Refresh the screen views with fresh database calculations
             updateUI();
 
-            // Clear input boxes for next use
             nameInput.value = "";
             priceInput.value = "";
         }
 
         function deleteSale(id) {
-            // Re-map the database by filtering out the matching target ID
             salesDatabase = salesDatabase.filter(sale => sale.id !== id);
             localStorage.setItem('mySalesData', JSON.stringify(salesDatabase));
             updateUI();
@@ -248,16 +230,13 @@
 
         function updateUI() {
             const tbody = document.getElementById('ledgerBody');
-            tbody.innerHTML = ""; // Clear current table UI lines completely before re-drawing
+            tbody.innerHTML = "";
 
             let runningRevenue = 0;
             let categoryCounts = {};
 
-            // Draw database line-by-line onto the screen matching array objects
             salesDatabase.forEach(sale => {
                 runningRevenue += sale.price;
-                
-                // Track category frequencies
                 categoryCounts[sale.category] = (categoryCounts[sale.category] || 0) + 1;
 
                 const tr = document.createElement('tr');
@@ -270,7 +249,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Calculate Top Category dynamically
             let bestCategory = "-";
             let maxCount = 0;
             for (const [cat, count] of Object.entries(categoryCounts)) {
@@ -280,7 +258,6 @@
                 }
             }
 
-            // Update top analytics grid metrics
             document.getElementById('totalRevenue').innerText = runningRevenue.toLocaleString();
             document.getElementById('totalItems').innerText = salesDatabase.length;
             document.getElementById('topCategory').innerText = bestCategory;
